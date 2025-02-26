@@ -24,3 +24,9 @@ This script requires only standard Linux utilities that are pre-installed on Ubu
 2. Give execution permission to the script:
    ```bash
    chmod +x storage_info.sh
+   ```
+3. Run the script:
+   ```bash
+   ./storage_info.sh
+   ```
+The output will display the Path, Total Capacity, and Available Capacity of storage devices.
