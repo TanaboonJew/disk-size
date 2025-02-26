@@ -1,22 +1,20 @@
-import psutil
+import os
 
 def get_storage_info():
-    partitions = psutil.disk_partitions()
-    
     print("Storage Devices Info:")
     print("---------------------------------")
-    for partition in partitions:
-        try:
-            size = psutil.disk_usage(partition.mountpoint)
-            print(f"Device Path: {partition.device}")
-            print(f"Total Capacity: {size.total / (1024**3):.2f} GB")
-            print(f"Unused Capacity: {size.free / (1024**3):.2f} GB")
+    
+    with os.popen("df -h") as df_output:
+        lines = df_output.readlines()
+    
+    for line in lines[1:]:  # Skip header
+        columns = line.split()
+        if columns[0].startswith("/dev/"):
+            device, size, avail = columns[0], columns[1], columns[3]
+            print(f"Device Path: {device}")
+            print(f"Total Capacity: {size}")
+            print(f"Unused Capacity: {avail}")
             print("---------------------------------")
-        except PermissionError:
-            print(f"Device Path: {partition.device}")
-            print("Permission denied - Unable to access details")
-            print("---------------------------------")
-            continue
 
 if __name__ == "__main__":
     get_storage_info()
